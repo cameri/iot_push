@@ -52,6 +52,9 @@ monitor_mem_cached=$?
 read_yn "Would you like to monitor the temperature? (y/n)"
 monitor_temp=$?
 
+read_yn "Would you like the temperature to be converted to Fahrenheit? (y/n)"
+monitor_temp_f=$?
+
 read_yn "Would you like to monitor the number of processes? (y/n)"
 monitor_pid_count=$?
 
@@ -106,6 +109,7 @@ monitor_mem_cached=$monitor_mem_cached
 
 # Monitor the temperature
 monitor_temp=$monitor_temp
+monitor_temp_f=$monitor_temp_f
 
 # Monitor the number of processes
 monitor_pid_count=$monitor_pid_count

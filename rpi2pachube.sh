@@ -59,8 +59,11 @@ fi
 # Read temperature (some systems do not define LD_LIBRARY_PATH)
 if [ $monitor_temp -eq 1 ]; then
   temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
-	  /opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\+\)'C/\1/")
-	dss=(${dss[@]} $(newds "temp" "$temp"))
+    /opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\+\)'C/\1/")
+  if [ $monitor_temp_f -eq 1 ]; then
+    temp=$(echo $temp | awk '{r=$1*9/5+32; printf "%0.2f", r}')
+  fi
+  dss=(${dss[@]} $(newds "temp" "$temp"))
 fi
 
 # Read process count (remove ps, wc and cron from the count)
@@ -104,13 +107,13 @@ if [ $monitor_network_interfaces -eq 1 ]; then
 fi
 
 # Serialize to JSON format
-data=$(IFS=, ;echo "{\"version\":\"1.0.0\",	\"datastreams\":[${dss[*]}]}")
+data=$(IFS=, ;echo "{\"version\":\"1.0.0\",\"datastreams\":[${dss[*]}]}")
 
-curl	--request PUT \
-	--data "$data" \
-	--header "Content-type: application/json" \
-	--header "X-ApiKey: ${api_key}" \
-       -s \
-	http://api.cosm.com/v2/feeds/${feed} 1>/dev/null
+curl --request PUT \
+  --data "$data" \
+  --header "Content-type: application/json" \
+  --header "X-ApiKey: ${api_key}" \
+  -s \
+  http://api.cosm.com/v2/feeds/${feed} 1>/dev/null
 
 exit 0
