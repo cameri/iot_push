@@ -81,6 +81,12 @@ if [ $monitor_connections -eq 1 ]; then
   dss=(${dss[@]} $(newds "connections" "$connections"))
 fi
 
+# Read uptime
+if [ $monitor_uptime -eq 1 ]; then
+  uptime=$(cut -d. -f1 /proc/uptime | awk '{h=$1/86400;printf "%.2f", h}')
+  dss=(${dss[@]} $(newds "uptime" "$uptime"))
+fi
+
 # Read throughput in KB/s
 if [ $monitor_network_interfaces -eq 1 ]; then
   # Convert network_interfaces (comma-separated) to an array called ifaces

@@ -61,6 +61,9 @@ monitor_connections=$?
 read_yn "Would you like to monitor the number of users logged in? (y/n)"
 monitor_users=$?
 
+read_yn "Would you like to monitor the uptime? (y/n)"
+monitor_uptime=$?
+
 read_yn "Would you like to monitor any network interfaces? (y/n)"
 monitor_network_interfaces=$?
 if [ $monitor_network_interfaces -eq 1 ]; then
@@ -112,6 +115,9 @@ monitor_connections=$monitor_connections
 
 # Monitor the number of users logged in
 monitor_users=$monitor_users
+
+# Monitor the uptime
+monitor_uptime=$monitor_uptime
 
 # Monitor monitor_network_interfaces
 monitor_network_interfaces=$monitor_network_interfaces

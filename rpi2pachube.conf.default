@@ -56,6 +56,9 @@ monitor_connections=1
 # Monitor the number of users logged in
 monitor_users=1
 
+# Monitor uptime
+monitor_uptime=1
+
 # Monitor monitor_network_interfaces
 monitor_network_interfaces=1
 
