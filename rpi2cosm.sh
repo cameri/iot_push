@@ -17,7 +17,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Load configuration
+if [[ -f "~/.rpi2cosm.conf" ]]; then
+. ~/.rpi2cosm.conf
+elif [[ -f "/etc/rpi2cosm.conf" ]]; then
 . /etc/rpi2cosm.conf
+else
+  echo "rpi2cosm: Error: Unable to load configuration. (File not found)" 1>&2
+  exit 1
+fi
 
 # Read memory
 mem_free=`cat /proc/meminfo | grep MemFree | awk '{r=$2/1024; printf "%0.2f", r}'`
@@ -65,3 +72,5 @@ curl	--request PUT \
 	--header "Content-type: application/json" \
 	--header "X-ApiKey: ${api_key}" \
 	http://api.cosm.com/v2/feeds/${feed}
+
+exit 0
