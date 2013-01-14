@@ -77,7 +77,8 @@ echo "*/5 * * * * ${dirname}/rpi2cosm.sh" >> /tmp/crontab
 # Replace current crontab with our version
 crontab /tmp/crontab
 # Show it to the user
-env EDITOR=nano crontab -e
+#env EDITOR=nano crontab -e
+crontab -l
 
 # Exit
 exit 0
