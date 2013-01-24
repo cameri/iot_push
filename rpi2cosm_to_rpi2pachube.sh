@@ -11,10 +11,13 @@ fi
 
 # Rename configuration files
 echo "Renaming configuration files..."
-if [ -f "~/.rpi2cosm.conf" ]; then
-  mv ~/.rpi2cosm.conf ~/.rpi2pachube.conf
+if [ -f "$HOME/.rpi2cosm.conf" ]; then
+  mv $HOME/.rpi2cosm.conf $HOME/.rpi2pachube.conf
+  cp $HOME/.rpi2pachube.conf $HOME/.rpi2pachube.conf.old
 fi
 # Remove rpi2cosm from crontab
+echo "Backing up crontab first to $HOME/crontab.backup..."
+crontab -l 2>/dev/null 1>$HOME/crontab.backup
 echo "Removing rpi2cosm from crontab..."
 crontab -l 2>/dev/null | grep rpi2cosm &> /dev/null
 if [ $? -eq 0 ]; then

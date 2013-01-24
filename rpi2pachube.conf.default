@@ -20,7 +20,7 @@
 # 1. Run setup.sh instead of using this file.
 # 2. If you run into trouble running setup.sh,
 #    copy this file to /etc/rpi2pachube.conf
-#    OR ~/.rpi2pachube.conf instead (note the dot on the 
+#    OR $HOME/.rpi2pachube.conf instead (note the dot on the 
 #    filenamename)
 # 3. Edit the following variables.
 #######################################################

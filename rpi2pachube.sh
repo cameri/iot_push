@@ -17,8 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Load configuration
-if [[ -f "~/.rpi2pachube.conf" ]]; then
-. ~/.rpi2pachube.conf
+if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
+. $HOME/.rpi2pachube.conf
 elif [[ -f "/etc/rpi2pachube.conf" ]]; then
 . /etc/rpi2pachube.conf
 else

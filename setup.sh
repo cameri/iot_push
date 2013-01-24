@@ -46,15 +46,15 @@ if [[ -z "$iface" ]]; then
 iface="eth0"
 fi
 
-if [[ -f "~/.rpi2pachube.conf" ]]; then
+if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
 while true; do
   echo -n "Configuration file already exists. Would you like to make a back up first? (y/n)"
   read option
   if [[ "$option" = "n" ]]; then
     break
   elif [[ "$option" = "y" ]]; then
-    echo "Moved old configuration to ~/.rpi2pachube.conf.backup"
-    cp ~/.rpi2pachube.conf ~/.rpi2pachube.conf.backup
+    echo "Moved old configuration to $HOME/.rpi2pachube.conf.backup"
+    cp $HOME/.rpi2pachube.conf $HOME/.rpi2pachube.conf.backup
     break
   fi
 done
@@ -76,12 +76,12 @@ feed=$feed
 iface=$iface
 EOF
 
-rm ~/.rpi2pachube.conf
-mv /tmp/rpi2pachube.conf ~/.rpi2pachube.conf
+rm $HOME/.rpi2pachube.conf
+mv /tmp/rpi2pachube.conf $HOME/.rpi2pachube.conf
 if [[ $? -eq 0 ]]; then
-  echo "Configuration file saved to ~/.rpi2pachube.conf"
+  echo "Configuration file saved to $HOME/.rpi2pachube.conf"
 else
-  echo "Unable to save configuration file to ~/.rpi2pachube.conf" 1>&2
+  echo "Unable to save configuration file to $HOME/.rpi2pachube.conf" 1>&2
   exit 1
 fi
 
