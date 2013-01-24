@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#    rpi2cosm - Script for pushing to Cosm from Raspberry Pi
+#    rpi2pachube - Script for pushing Raspberry Pi data to Pachube
 #    Copyright (c) 2012, Ricardo Cabral <ricardo.arturo.cabral@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Load configuration
-if [[ -f "~/.rpi2cosm.conf" ]]; then
-. ~/.rpi2cosm.conf
-elif [[ -f "/etc/rpi2cosm.conf" ]]; then
-. /etc/rpi2cosm.conf
+if [[ -f "~/.rpi2pachube.conf" ]]; then
+. ~/.rpi2pachube.conf
+elif [[ -f "/etc/rpi2pachube.conf" ]]; then
+. /etc/rpi2pachube.conf
 else
-  echo "rpi2cosm: Error: Unable to load configuration. (File not found)" 1>&2
+  echo "rpi2pachube: Error: Unable to load configuration. (File not found)" 1>&2
   exit 1
 fi
 
@@ -32,15 +32,15 @@ mem_total=`cat /proc/meminfo | grep MemTotal | awk '{r=$2/1024; printf "%0.2f", 
 mem_used=`echo $mem_total $mem_free | awk '{print $1-$2}'`
 mem_cached=`cat /proc/meminfo | grep ^Cached | awk '{r=$2/1024; printf "%0.2f", r}'`
 
-# Read cpu avg
-read tmp cpu tmp < /proc/loadavg
+# Read cpu avg (cpu_one and cpu_fifteen unused, feel free to add)
+read cpu_one cpu_five cpu_fifteen < /proc/loadavg
 
-# Read temperature
+# Read temperature (some systems do not define LD_LIBRARY_PATH)
 temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
 	/opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\+\)'C/\1/")
 
-# Read process count (remove ps and wc from the count)
-pid_count=`expr $(ps -e | wc -l) - 2`
+# Read process count (remove ps, wc and cron from the count)
+pid_count=`expr $(ps -e | wc -l) - 3`
 
 # Read throughput in KB/s
 ifstat -i $iface 1 1 | tail -n 1 > /tmp/ifstat
@@ -55,7 +55,7 @@ connections=`netstat -tun | grep ESTABLISHED | wc -l`
 # Serialize to JSON format
 data='{"version":"1.0.0",
 	"datastreams":[
-		{"id":"cpu", "current_value":"'$cpu'"},
+		{"id":"cpu", "current_value":"'$cpu_five'"},
 		{"id":"mem_free", "current_value":"'$mem_free'"},
 		{"id":"mem_used", "current_value":"'$mem_used'"},
 		{"id":"mem_cached", "current_value":"'$mem_cached'"},

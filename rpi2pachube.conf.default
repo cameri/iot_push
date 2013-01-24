@@ -1,4 +1,4 @@
-#    This file is part of rpi2cosm.
+#    This file is part of rpi2pachube.
 #    Copyright (c) 2012, Ricardo Cabral <ricardo.arturo.cabral@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -13,6 +13,17 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#######################################################
+#                    READ ME FIRST                    #
+#######################################################
+# 1. Run setup.sh instead of using this file.
+# 2. If you run into trouble running setup.sh,
+#    copy this file to /etc/rpi2pachube.conf
+#    OR ~/.rpi2pachube.conf instead (note the dot on the 
+#    filenamename)
+# 3. Edit the following variables.
+#######################################################
 
 # API Key
 api_key="YOUR API KEY"
