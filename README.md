@@ -1,8 +1,8 @@
-rpi2cosm
-========
+rpi2pachube
+===========
 
-Script for pushing to Cosm from Raspberry Pi
+Bash script for pushing Raspberry Pi data to Pachube using cron
 
-Visit the following link if you need help getting rpi2cosm working:
+Visit the following link if you need help getting rpi2pachube working:
 
 http://cameriworkbench.blogspot.com/2013/01/pushing-raspberry-pi-data-to-cosm-using.html
