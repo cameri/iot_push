@@ -43,8 +43,7 @@ temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
 pid_count=`expr $(ps -e | wc -l) - 3`
 
 # Read throughput in KB/s
-ifstat -i $iface 1 1 | tail -n 1 > /tmp/ifstat
-read iface_down iface_up < /tmp/ifstat
+read iface_down iface_up <<< `ifstat -i $iface 1 1 | tail -n 1`
 
 # Read user count
 users=`users | wc -w`
