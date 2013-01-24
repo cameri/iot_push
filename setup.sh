@@ -20,7 +20,7 @@ echo "=================================================================="
 echo "=               rpi2pachube configuration utility                ="
 echo "=================================================================="
 
-which realpath
+which realpath &> /dev/null
 if [ $? -eq 0 ]; then
   realpath=`realpath $0 2>/dev/null`
 else
