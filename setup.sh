@@ -81,7 +81,8 @@ mv /tmp/rpi2pachube.conf ~/.rpi2pachube.conf
 if [[ $? -eq 0 ]]; then
   echo "Configuration file saved to ~/.rpi2pachube.conf"
 else
-  echo "Unable to save configuration file" 1>&2
+  echo "Unable to save configuration file to ~/.rpi2pachube.conf" 1>&2
+  exit 1
 fi
 
 echo "Updating crontab..."
