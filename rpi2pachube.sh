@@ -70,6 +70,7 @@ curl	--request PUT \
 	--data "$data" \
 	--header "Content-type: application/json" \
 	--header "X-ApiKey: ${api_key}" \
+        -s \
 	http://api.cosm.com/v2/feeds/${feed}
 
 exit 0
