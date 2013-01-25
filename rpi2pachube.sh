@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #    rpi2pachube - Script for pushing Raspberry Pi data to Pachube
 #    Copyright (c) 2012, Ricardo Cabral <ricardo.arturo.cabral@gmail.com>
 #
@@ -43,7 +42,7 @@ temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
 pid_count=`expr $(ps -e | wc -l) - 3`
 
 # Read throughput in KB/s
-read iface_down iface_up <<< `ifstat -i $iface 1 1 | tail -n 1`
+read iface_down iface_up <<< `ifstat -i $iface 1 1 2>/dev/null | tail -n 1`
 
 # Read user count
 users=`users | wc -w`
@@ -71,6 +70,6 @@ curl	--request PUT \
 	--header "Content-type: application/json" \
 	--header "X-ApiKey: ${api_key}" \
         -s \
-	http://api.cosm.com/v2/feeds/${feed}
+	http://api.cosm.com/v2/feeds/${feed} 1>/dev/null
 
 exit 0
