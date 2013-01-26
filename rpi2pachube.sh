@@ -26,10 +26,10 @@ else
 fi
 
 # Read memory
-mem_free=`cat /proc/meminfo | grep MemFree | awk '{r=$2/1024; printf "%0.2f", r}'`
-mem_total=`cat /proc/meminfo | grep MemTotal | awk '{r=$2/1024; printf "%0.2f", r}'`
-mem_used=`echo $mem_total $mem_free | awk '{print $1-$2}'`
-mem_cached=`cat /proc/meminfo | grep ^Cached | awk '{r=$2/1024; printf "%0.2f", r}'`
+mem_free=$(cat /proc/meminfo | grep MemFree | awk '{r=$2/1024; printf "%0.2f", r}')
+mem_total=$(cat /proc/meminfo | grep MemTotal | awk '{r=$2/1024; printf "%0.2f", r}')
+mem_used=$(echo $mem_total $mem_free | awk '{print $1-$2}')
+mem_cached=$(cat /proc/meminfo | grep ^Cached | awk '{r=$2/1024; printf "%0.2f", r}')
 
 # Read cpu avg (cpu_one and cpu_fifteen unused, feel free to add)
 read cpu_one cpu_five cpu_fifteen < /proc/loadavg
@@ -39,16 +39,16 @@ temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
 	/opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\+\)'C/\1/")
 
 # Read process count (remove ps, wc and cron from the count)
-pid_count=`expr $(ps -e | wc -l) - 3`
+pid_count=$(expr $(ps -e | wc -l) - 3)
 
 # Read throughput in KB/s
-read iface_down iface_up <<< `ifstat -i $iface 1 1 2>/dev/null | tail -n 1`
+read iface_down iface_up <<< $(ifstat -i $iface 1 1 2>/dev/null | tail -n 1)
 
 # Read user count
-users=`users | wc -w`
+users=$(users | wc -w)
 
 # Read connection count
-connections=`netstat -tun | grep ESTABLISHED | wc -l`
+connections=$(netstat -tun | grep ESTABLISHED | wc -l)
 
 # Serialize to JSON format
 data='{"version":"1.0.0",
