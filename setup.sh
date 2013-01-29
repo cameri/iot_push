@@ -22,7 +22,7 @@ echo "=================================================================="
 
 which realpath &> /dev/null
 if [ $? -eq 0 ]; then
-  realpath=`realpath $0 2>/dev/null`
+  realpath=$(realpath $0 2>/dev/null)
 else
   echo "Command 'realpath' is missing." 1>&2
   echo "Install 'realpath' before running this utility." 1>&2
@@ -39,7 +39,7 @@ echo -n "Enter this device's Feed ID: "
 read feed
 done
 
-iface_possible=`ip link show | grep ^[0-9] | cut -d ' ' -f 2 | cut -d ':' -f 1 | tr "\n" ', ' | sed "s/,$//"`
+iface_possible=$(ip link show | grep ^[0-9] | cut -d ' ' -f 2 | cut -d ':' -f 1 | tr "\n" ', ' | sed "s/,$//")
 echo -n "Enter your default network interface (${iface_possible}) (default: eth0): "
 read iface
 if [[ -z "$iface" ]]; then
