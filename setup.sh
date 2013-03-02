@@ -16,6 +16,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+. utils/utils.sh
+
 echo "=================================================================="
 echo "=               rpi2pachube configuration utility                ="
 echo "=================================================================="
@@ -29,35 +31,50 @@ else
   exit 1
 fi
 
-while [[ -z "$api_key" ]]; do
-echo -n "Enter your API Key: "
-read api_key
-done
+read_s "Enter your API Key:" result
+api_key=$result
 
-while [[ -z "$feed" ]]; do
-echo -n "Enter this device's Feed ID: "
-read feed
-done
+read_s "Enter the Feed ID for this device:" result
+feed=$result
 
-iface_possible=`ip link show | grep ^[0-9] | cut -d ' ' -f 2 | cut -d ':' -f 1 | tr "\n" ', ' | sed "s/,$//"`
-echo -n "Enter your default network interface (${iface_possible}) (default: eth0): "
-read iface
-if [[ -z "$iface" ]]; then
-iface="eth0"
+read_yn "Would you like to monitor the load average over 5 minutes? (y/n)"
+monitor_load_avg=$?
+
+read_yn "Would you like to monitor free RAM memory? (y/n)"
+monitor_mem_free=$?
+
+read_yn "Would you like to monitor used RAM memory? (y/n)"
+monitor_mem_used=$?
+
+read_yn "Would you like to monitor cached RAM memory? (y/n)"
+monitor_mem_cached=$?
+
+read_yn "Would you like to monitor the temperature? (y/n)"
+monitor_temp=$?
+
+read_yn "Would you like to monitor the number of processes? (y/n)"
+monitor_pid_count=$?
+
+read_yn "Would you like to monitor the number of active TCP/UDP connections? (y/n)"
+monitor_connections=$?
+
+read_yn "Would you like to monitor the number of users logged in? (y/n)"
+monitor_users=$?
+
+read_yn "Would you like to monitor any network interfaces? (y/n)"
+monitor_network_interfaces=$?
+if [ $monitor_network_interfaces -eq 1 ]; then
+  avail_ifaces=$(get_interfaces);
+  read_s "Enter a comma-separated list of network interfaces ($avail_ifaces):" result
+  network_interfaces=$result
 fi
 
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
-while true; do
-  echo -n "Configuration file already exists. Would you like to make a back up first? (y/n)"
-  read option
-  if [[ "$option" = "n" ]]; then
-    break
-  elif [[ "$option" = "y" ]]; then
+  read_yn "Configuration file already exists. Would you like to make a back up first? (y/n)"
+  if [ $? -eq 1 ]; then
     echo "Moved old configuration to $HOME/.rpi2pachube.conf.backup"
     cp $HOME/.rpi2pachube.conf $HOME/.rpi2pachube.conf.backup
-    break
   fi
-done
 fi
 
 cat <<EOF > /tmp/rpi2pachube.conf
@@ -72,11 +89,44 @@ api_key=$api_key
 # Feed ID
 feed=$feed
 
-# Network Interface
-iface=$iface
+# Monitor load average
+monitor_load_avg=$monitor_load_avg
+
+# Monitor free RAM memory
+monitor_mem_free=$monitor_mem_free
+
+# Monitor used RAM memory
+monitor_mem_used=$monitor_mem_used
+
+# Monitor cached RAM memory
+monitor_mem_cached=$monitor_mem_cached
+
+# Monitor the temperature
+monitor_temp=$monitor_temp
+
+# Monitor the number of processes
+monitor_pid_count=$monitor_pid_count
+
+# Monitor the number of active TCP/UDP connections
+monitor_connections=$monitor_connections
+
+# Monitor the number of users logged in
+monitor_users=$monitor_users
+
+# Monitor monitor_network_interfaces
+monitor_network_interfaces=$monitor_network_interfaces
+
+# Network Interfaces
+network_interfaces=$network_interfaces
 EOF
 
-rm $HOME/.rpi2pachube.conf
+# Back up old configuration
+if [ -f "$HOME/.rpi2pachube.conf" ]; then
+  mv "$HOME/.rpi2pachube.conf" "$HOME/.rpi2pachube.conf.backup"
+fi
+
+# Write new configuration
+echo "Writing new configuration to $HOME/.rpi2pachube.conf..."
 mv /tmp/rpi2pachube.conf $HOME/.rpi2pachube.conf
 if [[ $? -eq 0 ]]; then
   echo "Configuration file saved to $HOME/.rpi2pachube.conf"

@@ -1,5 +1,5 @@
 #    This file is part of rpi2pachube.
-#    Copyright (c) 2012, Ricardo Cabral <ricardo.arturo.cabral@gmail.com>
+#    Copyright (c) 2012-2013, Ricardo Cabral <ricardo.arturo.cabral@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,15 +23,43 @@
 #    OR $HOME/.rpi2pachube.conf instead (note the dot on the 
 #    filenamename)
 # 3. Edit the following variables.
+# 4. Save the file.
 #######################################################
 
 # API Key
-api_key="YOUR API KEY"
-# Note: This API key must have 'update' access privileges to the feed ID.
+api_key="api key here"
 
-# Device/Feed ID
-feed="YOUR FEED"
+# Feed ID
+feed="feed here"
 
-# Network interface to monitor
-iface="eth0"
+# Monitor load average
+monitor_load_avg=1
+
+# Monitor free RAM memory
+monitor_mem_free=1
+
+# Monitor used RAM memory
+monitor_mem_used=1
+
+# Monitor cached RAM memory
+monitor_mem_cached=1
+
+# Monitor the temperature
+monitor_temp=1
+
+# Monitor the number of processes
+monitor_pid_count=1
+
+# Monitor the number of active TCP/UDP connections
+monitor_connections=1
+
+# Monitor the number of users logged in
+monitor_users=1
+
+# Monitor monitor_network_interfaces
+monitor_network_interfaces=1
+
+# Network Interfaces
+network_interfaces=eth0,wlan0
+
 
