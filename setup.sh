@@ -24,7 +24,7 @@ echo "=================================================================="
 
 which realpath &> /dev/null
 if [ $? -eq 0 ]; then
-  realpath=`realpath $0 2>/dev/null`
+  realpath=$(realpath $0 2>/dev/null)
 else
   echo "Command 'realpath' is missing." 1>&2
   echo "Install 'realpath' before running this utility." 1>&2
