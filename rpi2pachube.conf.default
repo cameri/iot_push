@@ -46,6 +46,7 @@ monitor_mem_cached=1
 
 # Monitor the temperature
 monitor_temp=1
+monitor_temp_f=0
 
 # Monitor the number of processes
 monitor_pid_count=1
