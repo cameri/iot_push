@@ -16,28 +16,49 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+function bool2str () {
+  if [ "${1:-0}" -eq 1 ]; then
+    echo -n "yes"
+  else
+    echo -n "no"
+  fi
+}
+
 function newds() {
   printf '{"id":"%s","current_value":"%s"}' "$1" "$2"
 }
 
 function read_yn () {
   while true; do
-    echo -n "$1 "
+    if [ "$2" != "" ]; then
+      echo -n "$1 (Default:" $(bool2str "$2") ")"
+    else
+      echo -n "$1 "
+    fi
     read value
     if [ "$value" = "y" ] || [ "$value" = "Y" ];  then
       return 1
     elif [ "$value" = "n" ] || [ "$value" = "N" ]; then
       return 0
+    elif [ "$2" != "" ] && [ "$value" = "" ]; then
+      return "${2:-0}"
     fi
   done
 }
 
 function read_s () {
   while true; do
-    echo -n "$1 "
+    if [ "$3" != "" ]; then
+      echo -n "$1 (Default: $3)"
+    else
+      echo -n "$1 "
+    fi
     read value
     if [ -n "$value" ]; then
       eval "$2=\"$value\""
+      break
+    elif [ "$3" != "" ]; then
+      eval "$2=\"$3\""
       break
     fi
   done

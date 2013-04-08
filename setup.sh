@@ -18,9 +18,12 @@
 
 . utils/utils.sh
 
-echo "=================================================================="
-echo "=               rpi2pachube configuration utility                ="
-echo "=================================================================="
+cat <<EOF
+==================================================================
+=               rpi2pachube configuration utility                =
+==================================================================
+
+EOF
 
 which realpath &> /dev/null
 if [ $? -eq 0 ]; then
@@ -31,50 +34,87 @@ else
   exit 1
 fi
 
-read_s "Enter your API Key:" result
-api_key=$result
+if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
+  . $HOME/.rpi2pachube.conf
+  cat <<EOF
+Current configuration:
+  -API Key: $api_key
+  -Feed: $feed
+  -Monitor load avg: $(bool2str "$monitor_load_avg")
+  -Monitor free memory: $(bool2str "$monitor_mem_free")
+  -Monitor used memory: $(bool2str "$monitor_mem_used")
+  -Monitor cached memory: $(bool2str "$monitor_mem_cached")
+  -Monitor temperature: $(bool2str "$monitor_temp")
+  -Monitor temp. in Fahrenheit: $(bool2str "$monitor_temp_f")
+  -Monitor number of processes: $(bool2str "$monitor_pid_count")
+  -Monitor number of connections: $(bool2str "$monitor_connections")
+  -Monitor no. of users logged in: $(bool2str "$monitor_users")
+  -Monitor uptime: $(bool2str "$monitor_uptime")
+  -Monitor network interfaces: $(bool2str "$monitor_network_interfaces")
+    -Network interfaces: $network_interfaces
+EOF
+  read_yn "Would you like to keep your current configuration? (y/n)"
+  if [ $? -eq 1 ]; then
+    echo "Nothing to do."
+    exit 0
+  fi
 
-read_s "Enter the Feed ID for this device:" result
-feed=$result
-
-read_yn "Would you like to monitor the load average over 5 minutes? (y/n)"
-monitor_load_avg=$?
-
-read_yn "Would you like to monitor free RAM memory? (y/n)"
-monitor_mem_free=$?
-
-read_yn "Would you like to monitor used RAM memory? (y/n)"
-monitor_mem_used=$?
-
-read_yn "Would you like to monitor cached RAM memory? (y/n)"
-monitor_mem_cached=$?
-
-read_yn "Would you like to monitor the temperature? (y/n)"
-monitor_temp=$?
-
-read_yn "Would you like the temperature to be converted to Fahrenheit? (y/n)"
-monitor_temp_f=$?
-
-read_yn "Would you like to monitor the number of processes? (y/n)"
-monitor_pid_count=$?
-
-read_yn "Would you like to monitor the number of active TCP/UDP connections? (y/n)"
-monitor_connections=$?
-
-read_yn "Would you like to monitor the number of users logged in? (y/n)"
-monitor_users=$?
-
-read_yn "Would you like to monitor the uptime? (y/n)"
-monitor_uptime=$?
-
-read_yn "Would you like to monitor any network interfaces? (y/n)"
-monitor_network_interfaces=$?
-if [ $monitor_network_interfaces -eq 1 ]; then
-  avail_ifaces=$(get_interfaces);
-  read_s "Enter a comma-separated list of network interfaces ($avail_ifaces):" result
-  network_interfaces=$result
 fi
 
+read_s "Enter your API Key:" result "$api_key"
+api_key=$result
+
+read_s "Enter the Feed ID for this device:" result "$feed"
+feed=$result
+
+read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg"
+monitor_load_avg=$?
+
+read_yn "Would you like to monitor free RAM memory? (y/n)" "$monitor_mem_free"
+monitor_mem_free=$?
+
+read_yn "Would you like to monitor used RAM memory? (y/n)" "$monitor_mem_used"
+monitor_mem_used=$?
+
+read_yn "Would you like to monitor cached RAM memory? (y/n)" "$monitor_mem_cached"
+monitor_mem_cached=$?
+
+read_yn "Would you like to monitor the temperature? (y/n)" "$monitor_temp"
+monitor_temp=$?
+
+read_yn "Would you like the temperature to be converted to Fahrenheit? (y/n)" "$monitor_temp_f"
+monitor_temp_f=$?
+
+read_yn "Would you like to monitor the number of processes? (y/n)" "$monitor_pid_count"
+monitor_pid_count=$?
+
+read_yn "Would you like to monitor the number of active TCP/UDP connections? (y/n)" "$monitor_connections"
+monitor_connections=$?
+
+read_yn "Would you like to monitor the number of users logged in? (y/n)" "$monitor_users"
+monitor_users=$?
+
+read_yn "Would you like to monitor the uptime? (y/n)" "$monitor_uptime"
+monitor_uptime=$?
+
+# Check that ifstat command is installed
+which ifstat &>/dev/null
+if [ $? -eq 0 ]; then
+  read_yn "Would you like to monitor any network interfaces? (y/n)" "$monitor_network_interfaces"
+  monitor_network_interfaces=$?
+  if [ $monitor_network_interfaces -eq 1 ]; then
+    avail_ifaces=$(get_interfaces);
+    read_s "Enter a comma-separated list of network interfaces ($avail_ifaces):" result "$network_interfaces"
+    network_interfaces=$result
+  fi
+else
+  monitor_network_interfaces=0
+  echo "WARNING: ifstat command not found. Unable to monitor network 
+interfaces. Press Enter to continue."  
+  read
+fi
+
+# Prompt user to back up existing configuration, if any
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
   read_yn "Configuration file already exists. Would you like to make a back up first? (y/n)"
   if [ $? -eq 1 ]; then
