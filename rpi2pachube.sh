@@ -22,8 +22,6 @@ cd $(dirname $(realpath $0))
 # Load configuration
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
 . $HOME/.rpi2pachube.conf
-elif [[ -f "/etc/rpi2pachube.conf" ]]; then
-. /etc/rpi2pachube.conf
 else
   echo "rpi2pachube: Error: Unable to load configuration. (File not found)" 1>&2
   exit 1
@@ -33,7 +31,7 @@ fi
 declare -a dss
 
 # Read cpu avg (cpu_one and cpu_fifteen unused, feel free to add)
-if [ "${monitor_load_avg:-0}" -eq 1 ]; then
+if [[ $monitor_load_avg -eq 1 ]]; then
   read load_one load_five load_fifteen < /proc/loadavg
   dss=(${dss[@]} $(newds "load_avg" "$load_five"))
 fi
@@ -42,7 +40,7 @@ fi
 mem_free=$(cat /proc/meminfo | grep MemFree | awk '{r=$2/1024; printf "%0.2f", r}')
 mem_total=$(cat /proc/meminfo | grep MemTotal | awk '{r=$2/1024; printf "%0.2f", r}')
 
-if [ "${monitor_mem_free:-0}" -eq 1 ]; then
+if [[ ${monitor_mem_free -eq 1 ]]; then
   dss=(${dss[@]} $(newds "mem_free" "$mem_free"))
 fi
 if [ "${monitor_mem_used:-0}" -eq 1 ]; then
