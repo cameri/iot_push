@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function bool2str () {
-  if [ "${1:-0}" -eq 1 ]; then
+  if [[ $1 -eq 1 ]]; then
     echo -n "yes"
   else
     echo -n "no"
@@ -30,17 +30,17 @@ function newds() {
 
 function read_yn () {
   while true; do
-    if [ "$2" != "" ]; then
+    if [[ -n $2 ]]; then
       echo -n "$1 (Default:" $(bool2str "$2") ")"
     else
       echo -n "$1 "
     fi
     read value
-    if [ "$value" = "y" ] || [ "$value" = "Y" ];  then
+    if [[ $value == "y" ]] || [[ $value == "Y" ]];  then
       return 1
-    elif [ "$value" = "n" ] || [ "$value" = "N" ]; then
+    elif [[ $value == "n" ]] || [[ $value == "N" ]]; then
       return 0
-    elif [ "$2" != "" ] && [ "$value" = "" ]; then
+    elif [[ -n $2 ]] && [[ -z $value ]]; then
       return "${2:-0}"
     fi
   done
@@ -48,16 +48,16 @@ function read_yn () {
 
 function read_s () {
   while true; do
-    if [ "$3" != "" ]; then
+    if [[ -n $3 ]]; then
       echo -n "$1 (Default: $3)"
     else
       echo -n "$1 "
     fi
     read value
-    if [ -n "$value" ]; then
+    if [[ -n $value ]]; then
       eval "$2=\"$value\""
       break
-    elif [ "$3" != "" ]; then
+    elif [[ -n $3 ]]; then
       eval "$2=\"$3\""
       break
     fi

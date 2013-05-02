@@ -40,22 +40,22 @@ fi
 mem_free=$(cat /proc/meminfo | grep MemFree | awk '{r=$2/1024; printf "%0.2f", r}')
 mem_total=$(cat /proc/meminfo | grep MemTotal | awk '{r=$2/1024; printf "%0.2f", r}')
 
-if [[ $monitor_mem_free == 1 ]]; then
+if [[ $monitor_mem_free -eq 1 ]]; then
   dss=(${dss[@]} $(newds "mem_free" "$mem_free"))
 fi
-if [[ $monitor_mem_used == 1 ]]; then
+if [[ $monitor_mem_used -eq 1 ]]; then
   mem_used=$(expr ${mem_total/.*} - ${mem_free/.*})
   dss=(${dss[@]} $(newds "mem_used" "$mem_used"))
 fi
 
 # Read cached memory
-if [[ $monitor_mem_cached == 1 ]]; then
+if [[ $monitor_mem_cached -eq 1 ]]; then
   mem_cached=$(cat /proc/meminfo | grep ^Cached | awk '{r=$2/1024; printf "%0.2f", r}')
   dss=(${dss[@]} $(newds "mem_cached" "$mem_cached"))
 fi
 
 # Read temperature (some systems do not define LD_LIBRARY_PATH)
-if [[ $monitor_temp == 1 ]]; then
+if [[ $monitor_temp -eq 1 ]]; then
   temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
     /opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\+\)'C/\1/")
   if [ "${monitor_temp_f:-0}" -eq 1 ]; then
@@ -65,31 +65,31 @@ if [[ $monitor_temp == 1 ]]; then
 fi
 
 # Read process count (remove ps, wc and cron from the count)
-if [[ $monitor_pid_count == 1 ]]; then
+if [[ $monitor_pid_count -eq 1 ]]; then
   pid_count=$(expr $(ps -e | wc -l) - 3)
   dss=(${dss[@]} $(newds "processes" "$pid_count"))
 fi
 
 # Read user count
-if [[ $monitor_users == 1 ]]; then
+if [[ $monitor_users -eq 1 ]]; then
   users=$(users | wc -w)
   dss=(${dss[@]} $(newds "users" "$users"))
 fi
 
 # Read connection count
-if [[ $monitor_connections == 1 ]]; then
+if [[ $monitor_connections -eq 1 ]]; then
   connections=$(netstat -tun | grep ESTABLISHED | wc -l)
   dss=(${dss[@]} $(newds "connections" "$connections"))
 fi
 
 # Read uptime
-if [[ $monitor_uptime == 1 ]]; then
+if [[ $monitor_uptime -eq 1 ]]; then
   uptime=$(cut -d. -f1 /proc/uptime | awk '{h=$1/86400; printf "%0.2f", h}')
   dss=(${dss[@]} $(newds "uptime" "$uptime"))
 fi
 
 # Read throughput in KB/s
-if [[ $monitor_network_interfaces == 1 ]]; then
+if [[ $monitor_network_interfaces -eq 1 ]]; then
   # Convert network_interfaces (comma-separated) to an array called ifaces
   SAVE_IFS=$IFS
   IFS=,

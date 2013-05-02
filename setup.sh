@@ -26,7 +26,7 @@ cat <<EOF
 EOF
 
 which realpath &> /dev/null
-if [ $? -eq 0 ]; then
+if [[ $? -eq 0 ]]; then
   realpath=$(realpath $0 2>/dev/null)
 else
   echo "Command 'realpath' is missing." 1>&2
@@ -54,7 +54,7 @@ Current configuration:
     -Network interfaces: $network_interfaces
 EOF
   read_yn "Would you like to keep your current configuration? (y/n)"
-  if [ $? -eq 1 ]; then
+  if [[ $? -eq 1 ]]; then
     echo "Nothing to do."
     exit 0
   fi
@@ -99,7 +99,7 @@ monitor_uptime=$?
 
 # Check that ifstat command is installed
 which ifstat &>/dev/null
-if [ $? -eq 0 ]; then
+if [[ $? -eq 0 ]]; then
   read_yn "Would you like to monitor any network interfaces? (y/n)" "$monitor_network_interfaces"
   monitor_network_interfaces=$?
   if [ $monitor_network_interfaces -eq 1 ]; then
@@ -117,7 +117,7 @@ fi
 # Prompt user to back up existing configuration, if any
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
   read_yn "Configuration file already exists. Would you like to make a back up first? (y/n)"
-  if [ $? -eq 1 ]; then
+  if [[ $? -eq 1 ]]; then
     echo "Moved old configuration to $HOME/.rpi2pachube.conf.backup"
     cp $HOME/.rpi2pachube.conf $HOME/.rpi2pachube.conf.backup
   fi
@@ -171,7 +171,7 @@ network_interfaces=$network_interfaces
 EOF
 
 # Back up old configuration
-if [ -f "$HOME/.rpi2pachube.conf" ]; then
+if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
   mv "$HOME/.rpi2pachube.conf" "$HOME/.rpi2pachube.conf.backup"
 fi
 
