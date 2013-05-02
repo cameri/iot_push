@@ -25,8 +25,7 @@ cat <<EOF
 
 EOF
 
-which realpath &> /dev/null
-if [[ $? -eq 0 ]]; then
+if which realpath &> /dev/null; then
   realpath=$(realpath $0 2>/dev/null)
 else
   echo "Command 'realpath' is missing." 1>&2
@@ -67,8 +66,21 @@ api_key=$result
 read_s "Enter the Feed ID for this device:" result "$feed"
 feed=$result
 
-read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg"
-monitor_load_avg=$?
+# If $monitor_load_avg was being used
+# assume as default for all load averages
+if [[ $monitor_load_avg -eq 1 ]]; then
+  $monitor_load_avg_1=1
+  $monitor_load_avg_5=1
+  $monitor_load_avg_15=1
+fi
+read_yn "Would you like to monitor the load average over 1 minute? (y/n)" "$monitor_load_avg_1"
+monitor_load_avg_1=$?
+
+read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg_1"
+monitor_load_avg_5=$?
+
+read_yn "Would you like to monitor the load average over 15 minutes? (y/n)" "$monitor_load_avg_1"
+monitor_load_avg_15=$?
 
 read_yn "Would you like to monitor free RAM memory? (y/n)" "$monitor_mem_free"
 monitor_mem_free=$?
@@ -98,8 +110,8 @@ read_yn "Would you like to monitor the uptime? (y/n)" "$monitor_uptime"
 monitor_uptime=$?
 
 # Check that ifstat command is installed
-which ifstat &>/dev/null
-if [[ $? -eq 0 ]]; then
+
+if which ifstat &>/dev/null; then
   read_yn "Would you like to monitor any network interfaces? (y/n)" "$monitor_network_interfaces"
   monitor_network_interfaces=$?
   if [ $monitor_network_interfaces -eq 1 ]; then
@@ -109,6 +121,7 @@ if [[ $? -eq 0 ]]; then
   fi
 else
   monitor_network_interfaces=0
+  network_interfaces=
   echo "WARNING: ifstat command not found. Unable to monitor network 
 interfaces. Press Enter to continue."  
   read
@@ -136,7 +149,9 @@ api_key=$api_key
 feed=$feed
 
 # Monitor load average
-monitor_load_avg=$monitor_load_avg
+monitor_load_avg_1=$monitor_load_avg_1
+monitor_load_avg_5=$monitor_load_avg_5
+monitor_load_avg_15=$monitor_load_avg_15
 
 # Monitor free RAM memory
 monitor_mem_free=$monitor_mem_free
