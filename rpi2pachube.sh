@@ -62,9 +62,9 @@ fi
 # Read temperature (some systems do not define LD_LIBRARY_PATH)
 if [[ $monitor_temp -eq 1 ]]; then
   temp=$(env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vc/lib \
-    /opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\+\)'C/\1/")
-  if [ "${monitor_temp_f:-0}" -eq 1 ]; then
-    temp=$(echo $temp | awk '{r=$1*9/5+32; printf "%0.2f", r}')
+    /opt/vc/bin/vcgencmd measure_temp | sed "s/temp=\([0-9]\+\.[0-9]\)[0-9]*'C/\1/")
+  if [[ $monitor_temp_f -eq 1 ]]; then
+    temp=$(echo $temp | awk '{r=$1*9/5+32; printf "%0.1f", r}')
   fi
   dss=(${dss[@]} $(newds "temp" "$temp"))
 fi
@@ -75,10 +75,16 @@ if [[ $monitor_pid_count -eq 1 ]]; then
   dss=(${dss[@]} $(newds "processes" "$pid_count"))
 fi
 
-# Read user count
+# Read current session count
 if [[ $monitor_users -eq 1 ]]; then
   users=$(users | wc -w)
   dss=(${dss[@]} $(newds "users" "$users"))
+fi
+
+# Read unique user count
+if [[ $monitor_users_unique -eq 1 ]]; then
+  users_unique=$(users | tr ' ' '\n' | sort | uniq | wc -l)
+  dss=(${dss[@]} $(newds "users_unique" "$users_unique"))
 fi
 
 # Read connection count

@@ -33,7 +33,9 @@ api_key="api key here"
 feed="feed here"
 
 # Monitor load average
-monitor_load_avg=1
+monitor_load_avg_1=1
+monitor_load_avg_5=1
+monitor_load_avg_15=1
 
 # Monitor free RAM memory
 monitor_mem_free=1
@@ -54,8 +56,11 @@ monitor_pid_count=1
 # Monitor the number of active TCP/UDP connections
 monitor_connections=1
 
-# Monitor the number of users logged in
+# Monitor the number of current sessions
 monitor_users=1
+
+# Monitor the number of unique users logged in
+monitor_users_unique=1
 
 # Monitor uptime
 monitor_uptime=1

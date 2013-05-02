@@ -47,7 +47,8 @@ Current configuration:
   -Monitor temp. in Fahrenheit: $(bool2str "$monitor_temp_f")
   -Monitor number of processes: $(bool2str "$monitor_pid_count")
   -Monitor number of connections: $(bool2str "$monitor_connections")
-  -Monitor no. of users logged in: $(bool2str "$monitor_users")
+  -Monitor number of current sessions: $(bool2str "$monitor_users")
+  -Monitor no. of unique users logged in: $(bool2str "$monitor_users_unique")
   -Monitor uptime: $(bool2str "$monitor_uptime")
   -Monitor network interfaces: $(bool2str "$monitor_network_interfaces")
     -Network interfaces: $network_interfaces
@@ -103,8 +104,11 @@ monitor_pid_count=$?
 read_yn "Would you like to monitor the number of active TCP/UDP connections? (y/n)" "$monitor_connections"
 monitor_connections=$?
 
-read_yn "Would you like to monitor the number of users logged in? (y/n)" "$monitor_users"
+read_yn "Would you like to monitor the number of current sessions? (y/n)" "$monitor_users"
 monitor_users=$?
+
+read_yn "Would you like to monitor the number of unique users logged in? (y/n)" "$monitor_users_unique"
+monitor_users_unique=$?
 
 read_yn "Would you like to monitor the uptime? (y/n)" "$monitor_uptime"
 monitor_uptime=$?
@@ -149,9 +153,7 @@ api_key=$api_key
 feed=$feed
 
 # Monitor load average
-monitor_load_avg_1=$monitor_load_avg_1
-monitor_load_avg_5=$monitor_load_avg_5
-monitor_load_avg_15=$monitor_load_avg_15
+monitor_load_avg=$monitor_load_avg
 
 # Monitor free RAM memory
 monitor_mem_free=$monitor_mem_free
@@ -174,6 +176,9 @@ monitor_connections=$monitor_connections
 
 # Monitor the number of users logged in
 monitor_users=$monitor_users
+
+ of users logged in
+monitor_users_unique=$monitor_users_unique
 
 # Monitor the uptime
 monitor_uptime=$monitor_uptime
