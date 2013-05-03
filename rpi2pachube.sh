@@ -42,8 +42,8 @@ if [[ $monitor_load_avg_15 -eq 1 ]]; then
   dss=(${dss[@]} $(newds "load_avg_15" "$load_fifteen"))
 fi
 # Read free and total memory
-mem_free=$(cat /proc/meminfo | grep MemFree | awk '{r=$2/1024; printf "%0.2f", r}')
-mem_total=$(cat /proc/meminfo | grep MemTotal | awk '{r=$2/1024; printf "%0.2f", r}')
+mem_free=$(grep MemFree /proc/meminfo | awk '{r=$2/1024; printf "%0.2f", r}')
+mem_total=$(grep MemTotal /proc/meminfo | awk '{r=$2/1024; printf "%0.2f", r}')
 
 if [[ $monitor_mem_free -eq 1 ]]; then
   dss=(${dss[@]} $(newds "mem_free" "$mem_free"))
@@ -55,7 +55,7 @@ fi
 
 # Read cached memory
 if [[ $monitor_mem_cached -eq 1 ]]; then
-  mem_cached=$(cat /proc/meminfo | grep ^Cached | awk '{r=$2/1024; printf "%0.2f", r}')
+  mem_cached=$(grep ^Cached /proc/meminfo | awk '{r=$2/1024; printf "%0.2f", r}')
   dss=(${dss[@]} $(newds "mem_cached" "$mem_cached"))
 fi
 
