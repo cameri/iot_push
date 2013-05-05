@@ -35,6 +35,15 @@ fi
 
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
   . $HOME/.rpi2pachube.conf
+
+  # If $monitor_load_avg was being used
+  # assume as default for all load averages
+  if [[ $monitor_load_avg -eq 1 ]]; then
+    monitor_load_avg_1=1
+    monitor_load_avg_5=1
+    monitor_load_avg_15=1
+  fi
+
   cat <<EOF
 Current configuration:
   -API Key: $api_key
@@ -53,7 +62,7 @@ Current configuration:
   -Monitor no. of unique users logged in: $(bool2str "$monitor_users_unique")
   -Monitor uptime: $(bool2str "$monitor_uptime")
   -Monitor network interfaces: $(bool2str "$monitor_network_interfaces")
-    -Network interfaces: $network_interfaces
+  -Network interfaces: $network_interfaces
 EOF
   read_yn "Would you like to keep your current configuration? (y/n)"
   if [[ $? -eq 1 ]]; then
@@ -69,13 +78,6 @@ api_key=$result
 read_s "Enter the Feed ID for this device:" result "$feed"
 feed=$result
 
-# If $monitor_load_avg was being used
-# assume as default for all load averages
-if [[ $monitor_load_avg -eq 1 ]]; then
-  monitor_load_avg_1=1
-  monitor_load_avg_5=1
-  monitor_load_avg_15=1
-fi
 read_yn "Would you like to monitor the load average over 1 minute? (y/n)" "$monitor_load_avg_1"
 monitor_load_avg_1=$?
 
