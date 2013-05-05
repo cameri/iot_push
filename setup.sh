@@ -39,7 +39,9 @@ if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
 Current configuration:
   -API Key: $api_key
   -Feed: $feed
-  -Monitor load avg: $(bool2str "$monitor_load_avg")
+  -Monitor load avg 1: $(bool2str "$monitor_load_avg_1")
+  -Monitor load avg 5: $(bool2str "$monitor_load_avg_5")
+  -Monitor load avg 15: $(bool2str "$monitor_load_avg_15")
   -Monitor free memory: $(bool2str "$monitor_mem_free")
   -Monitor used memory: $(bool2str "$monitor_mem_used")
   -Monitor cached memory: $(bool2str "$monitor_mem_cached")
