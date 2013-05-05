@@ -81,10 +81,10 @@ feed=$result
 read_yn "Would you like to monitor the load average over 1 minute? (y/n)" "$monitor_load_avg_1"
 monitor_load_avg_1=$?
 
-read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg_1"
+read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg_5"
 monitor_load_avg_5=$?
 
-read_yn "Would you like to monitor the load average over 15 minutes? (y/n)" "$monitor_load_avg_1"
+read_yn "Would you like to monitor the load average over 15 minutes? (y/n)" "$monitor_load_avg_15"
 monitor_load_avg_15=$?
 
 read_yn "Would you like to monitor free RAM memory? (y/n)" "$monitor_mem_free"
