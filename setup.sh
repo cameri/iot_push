@@ -196,11 +196,6 @@ monitor_network_interfaces=$monitor_network_interfaces
 network_interfaces=$network_interfaces
 EOF
 
-# Back up old configuration
-if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
-  mv "$HOME/.rpi2pachube.conf" "$HOME/.rpi2pachube.conf.backup"
-fi
-
 # Write new configuration
 echo "Writing new configuration to $HOME/.rpi2pachube.conf..."
 mv /tmp/rpi2pachube.conf $HOME/.rpi2pachube.conf
