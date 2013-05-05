@@ -72,9 +72,9 @@ feed=$result
 # If $monitor_load_avg was being used
 # assume as default for all load averages
 if [[ $monitor_load_avg -eq 1 ]]; then
-  $monitor_load_avg_1=1
-  $monitor_load_avg_5=1
-  $monitor_load_avg_15=1
+  monitor_load_avg_1=1
+  monitor_load_avg_5=1
+  monitor_load_avg_15=1
 fi
 read_yn "Would you like to monitor the load average over 1 minute? (y/n)" "$monitor_load_avg_1"
 monitor_load_avg_1=$?
@@ -129,7 +129,7 @@ else
   monitor_network_interfaces=0
   network_interfaces=
   echo "WARNING: ifstat command not found. Unable to monitor network 
-interfaces. Press Enter to continue."  
+interfaces. Press Enter to continue."
   read
 fi
 
