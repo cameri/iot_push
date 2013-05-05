@@ -21,7 +21,15 @@ cd $(dirname $(realpath $0))
 
 # Load configuration
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
-. $HOME/.rpi2pachube.conf
+  . $HOME/.rpi2pachube.conf
+
+  # If $monitor_load_avg was being used
+  # assume as default for all load averages
+  if [[ $monitor_load_avg -eq 1 ]]; then
+    monitor_load_avg_1=1
+    monitor_load_avg_5=1
+    monitor_load_avg_15=1
+  fi
 else
   echo "rpi2pachube: Error: Unable to load configuration." 1>&2
   exit 1
@@ -30,7 +38,7 @@ fi
 # Initialize datastreams array
 declare -a dss
 
-# Read cpu avg (cpu_one and cpu_fifteen unused, feel free to add)
+# Read load averages
 read load_one load_five load_fifteen temp < /proc/loadavg
 if [[ $monitor_load_avg_1 -eq 1 ]]; then
   dss=(${dss[@]} $(newds "load_avg_1" "$load_one"))

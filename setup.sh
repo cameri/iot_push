@@ -35,11 +35,22 @@ fi
 
 if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
   . $HOME/.rpi2pachube.conf
+
+  # If $monitor_load_avg was being used
+  # assume as default for all load averages
+  if [[ $monitor_load_avg -eq 1 ]]; then
+    monitor_load_avg_1=1
+    monitor_load_avg_5=1
+    monitor_load_avg_15=1
+  fi
+
   cat <<EOF
 Current configuration:
   -API Key: $api_key
   -Feed: $feed
-  -Monitor load avg: $(bool2str "$monitor_load_avg")
+  -Monitor load avg 1: $(bool2str "$monitor_load_avg_1")
+  -Monitor load avg 5: $(bool2str "$monitor_load_avg_5")
+  -Monitor load avg 15: $(bool2str "$monitor_load_avg_15")
   -Monitor free memory: $(bool2str "$monitor_mem_free")
   -Monitor used memory: $(bool2str "$monitor_mem_used")
   -Monitor cached memory: $(bool2str "$monitor_mem_cached")
@@ -51,7 +62,7 @@ Current configuration:
   -Monitor no. of unique users logged in: $(bool2str "$monitor_users_unique")
   -Monitor uptime: $(bool2str "$monitor_uptime")
   -Monitor network interfaces: $(bool2str "$monitor_network_interfaces")
-    -Network interfaces: $network_interfaces
+  -Network interfaces: $network_interfaces
 EOF
   read_yn "Would you like to keep your current configuration? (y/n)"
   if [[ $? -eq 1 ]]; then
@@ -67,20 +78,13 @@ api_key=$result
 read_s "Enter the Feed ID for this device:" result "$feed"
 feed=$result
 
-# If $monitor_load_avg was being used
-# assume as default for all load averages
-if [[ $monitor_load_avg -eq 1 ]]; then
-  $monitor_load_avg_1=1
-  $monitor_load_avg_5=1
-  $monitor_load_avg_15=1
-fi
 read_yn "Would you like to monitor the load average over 1 minute? (y/n)" "$monitor_load_avg_1"
 monitor_load_avg_1=$?
 
-read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg_1"
+read_yn "Would you like to monitor the load average over 5 minutes? (y/n)" "$monitor_load_avg_5"
 monitor_load_avg_5=$?
 
-read_yn "Would you like to monitor the load average over 15 minutes? (y/n)" "$monitor_load_avg_1"
+read_yn "Would you like to monitor the load average over 15 minutes? (y/n)" "$monitor_load_avg_15"
 monitor_load_avg_15=$?
 
 read_yn "Would you like to monitor free RAM memory? (y/n)" "$monitor_mem_free"
@@ -127,7 +131,7 @@ else
   monitor_network_interfaces=0
   network_interfaces=
   echo "WARNING: ifstat command not found. Unable to monitor network 
-interfaces. Press Enter to continue."  
+interfaces. Press Enter to continue."
   read
 fi
 
@@ -153,7 +157,9 @@ api_key=$api_key
 feed=$feed
 
 # Monitor load average
-monitor_load_avg=$monitor_load_avg
+monitor_load_avg_1=$monitor_load_avg_1
+monitor_load_avg_5=$monitor_load_avg_5
+monitor_load_avg_15=$monitor_load_avg_15
 
 # Monitor free RAM memory
 monitor_mem_free=$monitor_mem_free
@@ -177,7 +183,7 @@ monitor_connections=$monitor_connections
 # Monitor the number of users logged in
 monitor_users=$monitor_users
 
- of users logged in
+# Monitor the number of unique users logged in
 monitor_users_unique=$monitor_users_unique
 
 # Monitor the uptime
@@ -189,11 +195,6 @@ monitor_network_interfaces=$monitor_network_interfaces
 # Network Interfaces
 network_interfaces=$network_interfaces
 EOF
-
-# Back up old configuration
-if [[ -f "$HOME/.rpi2pachube.conf" ]]; then
-  mv "$HOME/.rpi2pachube.conf" "$HOME/.rpi2pachube.conf.backup"
-fi
 
 # Write new configuration
 echo "Writing new configuration to $HOME/.rpi2pachube.conf..."
