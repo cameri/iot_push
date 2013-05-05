@@ -153,7 +153,9 @@ api_key=$api_key
 feed=$feed
 
 # Monitor load average
-monitor_load_avg=$monitor_load_avg
+monitor_load_avg_1=$monitor_load_avg_1
+monitor_load_avg_5=$monitor_load_avg_5
+monitor_load_avg_15=$monitor_load_avg_15
 
 # Monitor free RAM memory
 monitor_mem_free=$monitor_mem_free
@@ -177,7 +179,7 @@ monitor_connections=$monitor_connections
 # Monitor the number of users logged in
 monitor_users=$monitor_users
 
- of users logged in
+# Monitor the number of unique users logged in
 monitor_users_unique=$monitor_users_unique
 
 # Monitor the uptime
