@@ -79,7 +79,8 @@ fi
 
 # Read process count (remove ps, wc and cron from the count)
 if [[ $monitor_pid_count -eq 1 ]]; then
-  pid_count=$(expr $(ps -e | wc -l) - 3)
+  pid_count=$(ps -e | wc -l)
+  let 'pid_count=pid_count - 3'
   dss=(${dss[@]} $(newds "processes" "$pid_count"))
 fi
 
